@@ -1,0 +1,16 @@
+C:\Users\cmpelk\source\repos\Biller\bin\Debug\net5.0\Biller.exe
+C:\Users\cmpelk\source\repos\Biller\bin\Debug\net5.0\Biller.deps.json
+C:\Users\cmpelk\source\repos\Biller\bin\Debug\net5.0\Biller.runtimeconfig.json
+C:\Users\cmpelk\source\repos\Biller\bin\Debug\net5.0\Biller.runtimeconfig.dev.json
+C:\Users\cmpelk\source\repos\Biller\bin\Debug\net5.0\Biller.dll
+C:\Users\cmpelk\source\repos\Biller\bin\Debug\net5.0\Biller.pdb
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\Biller.csproj.AssemblyReference.cache
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\Biller.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\Biller.AssemblyInfoInputs.cache
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\Biller.AssemblyInfo.cs
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\Biller.csproj.CoreCompileInputs.cache
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\Biller.dll
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\refint\Biller.dll
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\Biller.pdb
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\Biller.genruntimeconfig.cache
+C:\Users\cmpelk\source\repos\Biller\obj\Debug\net5.0\ref\Biller.dll
