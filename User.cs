@@ -34,9 +34,9 @@ namespace Biller
             RegisteredDate = registeredDate;
         }
 
-        public string GetFullName(string fname, string lname)
+        public string GetFullName()
         {
-            return fname + " " + lname;
+            return FName + " " + LName;
         }
 
         public void AddtoCDRList(CDR cdr)

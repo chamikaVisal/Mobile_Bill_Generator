@@ -18,7 +18,7 @@ namespace Biller
 
             CDR cdr4 = new CDR(0779617149, 0728331022, DateTime.Now, 300);
 
-            //user1 | user2  should inlucde the call records cdr1 | cdr2  as well
+            //user1 should inlucde the call records cdr1 | cdr2 | cdr3  as well 
 
 
             Bill b1 = new Bill();
@@ -32,10 +32,10 @@ namespace Biller
 
 
             b1.PrintBill(user1);
-           // b2.PrintBill(user2);
-
             user1.PrintCallsList();
-           // user2.PrintCallsList();
+
+            b2.PrintBill(user2);
+            user2.PrintCallsList();
 
 
 

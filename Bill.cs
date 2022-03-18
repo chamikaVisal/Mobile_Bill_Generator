@@ -39,11 +39,10 @@ namespace Biller
             {
                 case "A":
                     p1.MonthlyRental = 100;
-                    bill.Rental = p1.MonthlyRental;
+                    bill.Rental = 100;
 
                     foreach (CDR obj in user.GetCallsList())
                     {
-
                         double NoOfMins = obj.CallDuration / 60;
 
                         if (obj.IsPeakHour(obj) && obj.IsLocalCall(obj))    // peak hour and local call
@@ -77,11 +76,12 @@ namespace Biller
                         {
                             bill.TotalDiscount = bill.TotalCallCharges * (40.0 / 100);
                         }
+                        bill.Billamount = (bill.TotalCallCharges + bill.TotalTax + bill.Rental) - bill.TotalDiscount;
                     }
 
                     break;
                 case "B":
-                    // code block
+                 //   CalculateCharge(bill.Rental, obj);
                     break;
                 case "C":
                     // code block
@@ -93,8 +93,50 @@ namespace Biller
                     // code block
                     break;
             }
-            bill.Billamount = (bill.TotalCallCharges + bill.TotalTax + bill.Rental) - bill.TotalDiscount;
 
+
+            return bill;
+        }
+        public static Bill CalculateCharge(double rental,CDR cdr,User user)
+        {
+            Bill bill = new Bill();
+            double NoOfMins = cdr.CallDuration / 60;
+
+            foreach (CDR obj in user.GetCallsList())
+            {
+                if (obj.IsPeakHour(obj) && obj.IsLocalCall(obj))    // peak hour and local call
+                {
+                    obj.Charge = (double)((int)Math.Round(NoOfMins) * 3);
+                    bill.TotalCallCharges += (double)((int)Math.Round(NoOfMins) * 3);
+
+                }
+                else if (obj.IsPeakHour(obj) && !obj.IsLocalCall(obj))  // peak hour and long distance call
+                {
+                    obj.Charge = (double)((int)Math.Round(NoOfMins) * 5);
+                    bill.TotalCallCharges += (double)((int)Math.Round(NoOfMins) * 5);
+                }
+                else if (!obj.IsPeakHour(obj) && obj.IsLocalCall(obj))  // off -peak hour and local call
+                {
+                    obj.Charge = (double)((int)Math.Round(NoOfMins) * 2);
+                    bill.TotalCallCharges += (double)((int)Math.Round(NoOfMins) * 2);
+                }
+                else if (!obj.IsPeakHour(obj) && !obj.IsLocalCall(obj)) // off -peak hour and long distance call
+                {
+                    obj.Charge = (double)((int)Math.Round(NoOfMins) * 4);
+                    bill.TotalCallCharges += (double)((int)Math.Round(NoOfMins) * 4);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+                bill.TotalTax = bill.TotalCallCharges * (20.0 / 100);
+
+                if (bill.TotalCallCharges > 1000)
+                {
+                    bill.TotalDiscount = bill.TotalCallCharges * (40.0 / 100);
+                }
+            }
+            bill.Billamount = (bill.TotalCallCharges + bill.TotalTax + bill.Rental) - bill.TotalDiscount;
             return bill;
         }
 
@@ -103,6 +145,9 @@ namespace Biller
             Console.WriteLine("--------------------------------------------------------------------------------- \n");
 
             Console.WriteLine("Bill for " + user.PhoneNumber + " for the month of March 2022\n");
+
+            Console.WriteLine("Customer Name                : " + user.GetFullName());
+            Console.WriteLine("Billed to                    : " + user.BillingAddress);
             Console.WriteLine("Total call charges           : " + "Rs." + CalculateBill(user).TotalCallCharges);
             Console.WriteLine("Total discount               : " + "Rs." + CalculateBill(user).TotalDiscount);
             Console.WriteLine("Total Tax                    : " + "Rs." + CalculateBill(user).TotalTax);
