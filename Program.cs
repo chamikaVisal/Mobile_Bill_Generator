@@ -27,17 +27,17 @@ namespace Biller
 
             CDR cdr1 = new CDR(0717291782, 0718331022, DateTime.Now, 100);
             CDR cdr2 = new CDR(0717291782, 0718331022, DateTime.Now, 250);
-            CDR cdr3 = new CDR(0717291782, 0728331022, DateTime.Now, 5000);
+            CDR cdr3 = new CDR(0717291782, 0728331022, new DateTime(2022, 10, 3, 8, 40, 08), 5000);
 
             CDR cdr4 = new CDR(0779617149, 0728331022, DateTime.Now, 300);
 
             Bill b1 = new Bill();
 
-            user1.AddtoCDRList(cdr1);
-            user1.AddtoCDRList(cdr2);
-            user1.AddtoCDRList(cdr3);
+            user1.AddtoCDRList(cdr1, month);
+            user1.AddtoCDRList(cdr2, month);
+            user1.AddtoCDRList(cdr3, month);
 
-            user2.AddtoCDRList(cdr4);
+            user2.AddtoCDRList(cdr4, month);
 
 
             b1.PrintBill(user.getUser(PhoneNo));

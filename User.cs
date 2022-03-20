@@ -40,19 +40,15 @@ namespace Biller
             return FName + " " + LName;
         }
 
-        public void AddtoCDRList(CDR cdr)
+        public void AddtoCDRList(CDR cdr, string month)
         {
-            
-            if (cdr.CallerPhoneNumber == PhoneNumber)
+            Console.WriteLine("this is month eliye > " + cdr.CallStartTime.ToString("MMMM"));
+            if (cdr.CallerPhoneNumber == PhoneNumber && cdr.CallStartTime.ToString("MMMM") == month)
             {
-                Console.WriteLine(PhoneNumber + "thi sis calleer");
+                Console.WriteLine("this is month athule > " + cdr.CallStartTime.ToString("MMMM"));
                 Calls.Add(cdr);
-                  
             }
-            else
-            {
-                throw new Exception();
-            }
+           
         }
 
         public List<CDR> GetCallsList()
