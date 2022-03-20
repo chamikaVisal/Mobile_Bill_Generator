@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 
 namespace Biller
 {
-    internal class CDR
+    public class CDR
     {
-        public int CallerPhoneNumber { get; set; }
-        public int CalleePhoneNumber { get; set; }
-        public DateTime CallStartTime { get; set; }
-        public double CallDuration { get; set; }
-        public double Charge { get; set; }
+        private int callerPhoneNumber;
+        public int CallerPhoneNumber { get { return callerPhoneNumber; } set { callerPhoneNumber = value; } }
+        private int calleePhoneNumber;
+        public int CalleePhoneNumber { get { return calleePhoneNumber; } set { calleePhoneNumber = value; } }
+        private DateTime callStartTime;
+        public DateTime CallStartTime { get { return callStartTime; } set { callStartTime = value; } }
+        private double callDuration;
+        public double CallDuration { get { return callDuration; } set { callDuration = value; } }
+        private double charge;
+        public double Charge { get { return charge; } set { charge = value; } }
 
         public CDR(int callerPhoneNumber, int calleePhoneNumber, DateTime callStartTime, double callDuration)
         {

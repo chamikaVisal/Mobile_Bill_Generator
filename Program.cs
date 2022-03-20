@@ -9,8 +9,21 @@ namespace Biller
     {
         static void Main(string[] args)
         {
-            User user1 = new User("chamika", "perera", "madampe", "A", 0717291782, DateTime.Now);
+            int PhoneNo;
+            string month;
+
+            Console.WriteLine("Enter the Phone Number to Generate the Bill : ");
+            PhoneNo = Int32.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter the Month : ");
+            month = Console.ReadLine();
+
+            User user = new User(); 
+            User user1 = new User("chamika", "perera", ".chamikamadampe", "A", 0717291782, DateTime.Now);
             User user2 = new User("sriyani", "perera", "madampe", "A", 0779617149, DateTime.Now);
+
+            user.AddtoUserList(user1);
+            user.AddtoUserList(user2);
 
             CDR cdr1 = new CDR(0717291782, 0718331022, DateTime.Now, 100);
             CDR cdr2 = new CDR(0717291782, 0718331022, DateTime.Now, 250);
@@ -18,11 +31,7 @@ namespace Biller
 
             CDR cdr4 = new CDR(0779617149, 0728331022, DateTime.Now, 300);
 
-            //user1 should inlucde the call records cdr1 | cdr2 | cdr3  as well 
-
-
             Bill b1 = new Bill();
-            Bill b2 = new Bill();
 
             user1.AddtoCDRList(cdr1);
             user1.AddtoCDRList(cdr2);
@@ -31,11 +40,7 @@ namespace Biller
             user2.AddtoCDRList(cdr4);
 
 
-            b1.PrintBill(user1);
-            user1.PrintCallsList();
-
-            b2.PrintBill(user2);
-            user2.PrintCallsList();
+            b1.PrintBill(user.getUser(PhoneNo));
 
 
 

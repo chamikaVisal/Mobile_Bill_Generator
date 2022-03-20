@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Biller
 {
-    internal class User
+    public class User
     {
 
         public string FName { get; set; }
@@ -17,8 +17,9 @@ namespace Biller
         public int PhoneNumber { get; set; }
         public DateTime RegisteredDate { get; set; }
 
-        List<CDR> Calls = new List<CDR>();
-
+        private  List<CDR> Calls = new List<CDR>();
+        private  List<User> Users = new List<User>();
+        public User user { get; set; }
         public User()
         {
 
@@ -41,11 +42,12 @@ namespace Biller
 
         public void AddtoCDRList(CDR cdr)
         {
-
+            
             if (cdr.CallerPhoneNumber == PhoneNumber)
             {
+                Console.WriteLine(PhoneNumber + "thi sis calleer");
                 Calls.Add(cdr);
-              //  Console.WriteLine("this is the callee > " + cdr.CalleePhoneNumber); // To ensure the record is added
+                  
             }
             else
             {
@@ -58,17 +60,49 @@ namespace Biller
             return Calls;
         }
 
-        public void PrintCallsList()
+        public  void AddtoUserList(User user)
         {
-            Console.WriteLine("Call Records for " + PhoneNumber + " for the month of March 2022\n");
-            foreach (var obj in Calls)
+            Users.Add(user);
+        }
+        public List<User> GetUserList()
+        {
+            return Users;
+        }
+
+        public void PrintCallsList(User user)
+        {
+            if (user.PhoneNumber == PhoneNumber)
             {
-                Console.WriteLine("Callee Phone Number         : " + obj.CalleePhoneNumber);
-                Console.WriteLine("Call Duration               : " + obj.CallDuration + " seconds");
-                Console.WriteLine("Call Start Time             : " + obj.CallStartTime);
-                Console.WriteLine("Call Charge                 : " + "Rs." + obj.Charge + "\n");
+                {
+                    Console.WriteLine("Call Records for " + user.PhoneNumber + " for the month of March 2022\n");
+                    foreach (var obj in Calls)
+                    {
+                        Console.WriteLine("Callee Phone Number         : " + obj.CalleePhoneNumber);
+                        Console.WriteLine("Call Duration               : " + obj.CallDuration + " seconds");
+                        Console.WriteLine("Call Start Time             : " + obj.CallStartTime);
+                        Console.WriteLine("Call Charge                 : " + "Rs." + obj.Charge + "\n");
+                    }
+                    Console.WriteLine("--------------------------------------------------------------------------------- \n");
+                }
             }
-            Console.WriteLine("--------------------------------------------------------------------------------- \n");
+
+
+
+
+        }
+
+        public User getUser(int PhoneNo)
+        {
+
+            foreach (var obj in Users)
+            {
+                if (obj.PhoneNumber == PhoneNo)
+                {
+                    user = obj;
+                }
+            }
+            return user;
+
         }
 
 
