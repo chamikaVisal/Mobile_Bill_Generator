@@ -10,16 +10,33 @@ namespace Biller
     public class User
     {
 
-        public string FName { get; set; }
-        public string LName { get; set; }
-        public string BillingAddress { get; set; }
-        public string PackageCode { get; set; }
-        public int PhoneNumber { get; set; }
-        public DateTime RegisteredDate { get; set; }
+        private string fName;
+        public string FName { get { return fName; } set { fName = value; } }
 
-        private  List<CDR> Calls = new List<CDR>();
-        private  List<User> Users = new List<User>();
-        public User user { get; set; }
+        private string lName;
+        public string LName { get { return lName; } set { lName = value; } }
+
+        private string billingAddress;
+        public string BillingAddress { get { return billingAddress; } set { billingAddress = value; } }
+
+        private string packageCode;
+        public string PackageCode { get { return packageCode; } set { packageCode = value; } }
+
+        private int phoneNumber;
+        public int PhoneNumber { get { return phoneNumber; } set { phoneNumber = value; } }
+
+        private DateTime registeredDate;
+        public DateTime RegisteredDate { get { return registeredDate; } set { registeredDate = value; } }
+
+        private List<CDR> calls = new List<CDR>();
+        public List<CDR> Calls { get { return calls; }set { calls = value; }  }
+
+        private List<User>users = new List<User>();
+        public List<User> Users { get { return users; } set { users = value; } }
+
+        private User userobj;
+        public User user { get { return userobj; } set { userobj = value; } }
+
         public User()
         {
 
@@ -42,13 +59,11 @@ namespace Biller
 
         public void AddtoCDRList(CDR cdr, string month)
         {
-            Console.WriteLine("this is month eliye > " + cdr.CallStartTime.ToString("MMMM"));
-            if (cdr.CallerPhoneNumber == PhoneNumber && cdr.CallStartTime.ToString("MMMM") == month)
+            if (cdr.CallerPhoneNumber == PhoneNumber && cdr.CallStartTime.ToString("MMMM").ToLower() == month)
             {
-                Console.WriteLine("this is month athule > " + cdr.CallStartTime.ToString("MMMM"));
                 Calls.Add(cdr);
             }
-           
+
         }
 
         public List<CDR> GetCallsList()
@@ -56,35 +71,13 @@ namespace Biller
             return Calls;
         }
 
-        public  void AddtoUserList(User user)
+        public void AddtoUserList(User user)
         {
             Users.Add(user);
         }
         public List<User> GetUserList()
         {
             return Users;
-        }
-
-        public void PrintCallsList(User user)
-        {
-            if (user.PhoneNumber == PhoneNumber)
-            {
-                {
-                    Console.WriteLine("Call Records for " + user.PhoneNumber + " for the month of March 2022\n");
-                    foreach (var obj in Calls)
-                    {
-                        Console.WriteLine("Callee Phone Number         : " + obj.CalleePhoneNumber);
-                        Console.WriteLine("Call Duration               : " + obj.CallDuration + " seconds");
-                        Console.WriteLine("Call Start Time             : " + obj.CallStartTime);
-                        Console.WriteLine("Call Charge                 : " + "Rs." + obj.Charge + "\n");
-                    }
-                    Console.WriteLine("--------------------------------------------------------------------------------- \n");
-                }
-            }
-
-
-
-
         }
 
         public User getUser(int PhoneNo)
@@ -101,6 +94,25 @@ namespace Biller
 
         }
 
+        public void PrintCallsList(User user, string month)
+        {
+            if (user.PhoneNumber == PhoneNumber)
+            {
+                {
+                    Console.WriteLine("Call Records for " + user.PhoneNumber + " for the month of " + month + " 2022\n");
+                    foreach (var obj in Calls)
+                    {
+                        Console.WriteLine("Callee Phone Number         : " + obj.CalleePhoneNumber + "\n"
+                                         +"Call Duration               : " + obj.CallDuration + " seconds" + "\n"
+                                         +"Call Start Time             : " + obj.CallStartTime + "\n"
+                                         +"Call Charge                 : " + "Rs." + obj.Charge + "\n");
+                    }
+                    Console.WriteLine("--------------------------------------------------------------------------------- \n");
+                }
+            }
+        }
+
+        
 
     }
 }

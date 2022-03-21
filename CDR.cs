@@ -11,12 +11,16 @@ namespace Biller
     {
         private int callerPhoneNumber;
         public int CallerPhoneNumber { get { return callerPhoneNumber; } set { callerPhoneNumber = value; } }
+
         private int calleePhoneNumber;
         public int CalleePhoneNumber { get { return calleePhoneNumber; } set { calleePhoneNumber = value; } }
+
         private DateTime callStartTime;
         public DateTime CallStartTime { get { return callStartTime; } set { callStartTime = value; } }
+
         private double callDuration;
         public double CallDuration { get { return callDuration; } set { callDuration = value; } }
+
         private double charge;
         public double Charge { get { return charge; } set { charge = value; } }
 
@@ -44,16 +48,16 @@ namespace Biller
             return false; // long distance call
         }
 
-        public bool IsPeakHour(CDR cdr)
+        public bool IsPeakHour(CDR cdr,int peakStartHour,int peakEndHour)
         {
             string hour = cdr.CallStartTime.ToString("HH");
             int convertedhour = int.Parse(hour);
 
-            if ((convertedhour > 8) && (convertedhour < 20))
+            if ((convertedhour > peakStartHour) && (convertedhour < peakEndHour))
             {
                 return true;
             }
-            return false;
+            return false; // off peak hour
         }
 
     }

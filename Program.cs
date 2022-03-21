@@ -16,11 +16,11 @@ namespace Biller
             PhoneNo = Int32.Parse(Console.ReadLine());
 
             Console.WriteLine("Enter the Month : ");
-            month = Console.ReadLine();
+            month = Console.ReadLine().ToLower();
 
             User user = new User(); 
             User user1 = new User("chamika", "perera", ".chamikamadampe", "A", 0717291782, DateTime.Now);
-            User user2 = new User("sriyani", "perera", "madampe", "A", 0779617149, DateTime.Now);
+            User user2 = new User("sriyani", "perera", "madampe", "C", 0779617149, DateTime.Now);
 
             user.AddtoUserList(user1);
             user.AddtoUserList(user2);
@@ -40,7 +40,7 @@ namespace Biller
             user2.AddtoCDRList(cdr4, month);
 
 
-            b1.PrintBill(user.getUser(PhoneNo));
+            b1.PrintBill(user.getUser(PhoneNo),month);
 
 
 

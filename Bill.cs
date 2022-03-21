@@ -9,12 +9,23 @@ namespace Biller
 {
     public class Bill
     {
-        private User user { get; set; }
-        private double TotalCallCharges { get; set; }
-        private double TotalDiscount { get; set; }
-        private double TotalTax { get; set; }
-        private double Rental { get; set; }
-        private double Billamount { get; set; }
+        private User userobj;
+        public User user { get { return userobj; } set { userobj = value; } }
+
+        private double totalCallCharges;
+        public double TotalCallCharges { get { return totalCallCharges; } set { totalCallCharges = value; } }
+
+        private double totalDiscount;
+        public double TotalDiscount { get { return totalDiscount; } set { totalDiscount = value; } }
+
+        private double totalTax;
+        public double TotalTax { get { return totalTax; } set { totalTax = value; } }
+
+        private double rental;
+        public double Rental { get { return rental; } set { rental = value; } }
+
+        private double billamount;
+        public double Billamount { get { return billamount; } set { billamount = value; } }
 
         public Bill()
         {
@@ -34,9 +45,9 @@ namespace Biller
         {
             Bill bill = new Bill();
 
-            Package packageA = new Package("A", 100, "PER_MINUTE", 20, 8, 8, 20, 3, 5, 2, 4);
+            Package packageA = new Package("A", 100, "PER_MINUTE", 18, 10, 10, 18, 3, 5, 2, 4);
             Package packageB = new Package("B", 100, "PER_SECOND", 20, 8, 8, 20, 4, 6, 3, 5);
-            Package packageC = new Package("C", 300, "PER_MINUTE", 20, 8, 8, 20, 2, 3, 1, 2);
+            Package packageC = new Package("C", 300, "PER_MINUTE", 21, 9, 9, 21, 2, 3, 1, 2);
             Package packageD = new Package("D", 399, "PER_SECOND", 20, 8, 8, 20, 3, 5, 2, 4);
 
             switch (user.PackageCode)
@@ -46,15 +57,15 @@ namespace Biller
                     CalculateCost(user, bill, packageA);
                     break;
                 case "B":
-                    bill.Rental = packageA.MonthlyRental;
+                    bill.Rental = packageB.MonthlyRental;
                     CalculateCost(user, bill, packageB);
                     break;
                 case "C":
-                    bill.Rental = packageA.MonthlyRental;
+                    bill.Rental = packageC.MonthlyRental;
                     CalculateCost(user, bill, packageC);
                     break;
                 case "D":
-                    bill.Rental = packageA.MonthlyRental;
+                    bill.Rental = packageD.MonthlyRental;
                     CalculateCost(user, bill, packageD);
                     break;
                 default:
@@ -76,31 +87,37 @@ namespace Biller
                 }
                 else
                 {
+                    Console.WriteLine("this is pkg type > " + pkg.BillingType);
                     NoOfMins = obj.CallDuration / 3600;
+                    Console.WriteLine("No of mins" + NoOfMins);
                 }
 
 
-                if (obj.IsPeakHour(obj) && obj.IsLocalCall(obj))    // peak hour and local call
+                if (obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && obj.IsLocalCall(obj))    // peak hour and local call
                 {
                     double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.PeakandLocalCharge);
+
                     obj.Charge = CallFare;
                     bill.TotalCallCharges += CallFare;
                 }
-                else if (obj.IsPeakHour(obj) && !obj.IsLocalCall(obj))  // peak hour and long distance call
+                else if (obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && !obj.IsLocalCall(obj))  // peak hour and long distance call
                 {
                     double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.PeakandLongDistanceCharge);
+
                     obj.Charge = CallFare;
                     bill.TotalCallCharges += CallFare;
                 }
-                else if (!obj.IsPeakHour(obj) && obj.IsLocalCall(obj))  // off -peak hour and local call
+                else if (!obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && obj.IsLocalCall(obj))  // off -peak hour and local call
                 {
                     double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.OffPeakandLocalCharge);
+
                     obj.Charge = CallFare;
                     bill.TotalCallCharges += CallFare;
                 }
-                else if (!obj.IsPeakHour(obj) && !obj.IsLocalCall(obj)) // off -peak hour and long distance call
+                else if (!obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && !obj.IsLocalCall(obj)) // off -peak hour and long distance call
                 {
                     double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.OffPeakandLongDistanceCharge);
+
                     obj.Charge = CallFare;
                     bill.TotalCallCharges += CallFare;
                 }
@@ -119,23 +136,23 @@ namespace Biller
         }
 
 
-        public void PrintBill(User user)
+        public void PrintBill(User user, string month)
         {
             Console.WriteLine("--------------------------------------------------------------------------------- \n");
 
-            Console.WriteLine("Bill for " + user.GetFullName() + " for the month of March 2022\n");
+            Console.WriteLine("Bill for " + user.GetFullName() + " for the month of " + month + " 2022\n");
 
-            Console.WriteLine("Customer Name                : " + user.GetFullName());
-            Console.WriteLine("Billed to                    : " + user.BillingAddress);
-            Console.WriteLine("Total call charges           : " + "Rs." + CalculateBill(user).TotalCallCharges);
-            Console.WriteLine("Total discount               : " + "Rs." + CalculateBill(user).TotalDiscount);
-            Console.WriteLine("Total Tax                    : " + "Rs." + CalculateBill(user).TotalTax);
-            Console.WriteLine("Rental                       : " + "Rs." + CalculateBill(user).Rental);
-            Console.WriteLine("Bill amount                  : " + "Rs." + CalculateBill(user).Billamount + "\n");
+            Console.WriteLine("Customer Name                : " + user.GetFullName() + "\n"
+                             + "Billed to                    : " + user.BillingAddress + "\n"
+                             + "Total call charges           : " + "Rs." + CalculateBill(user).TotalCallCharges + "\n"
+                             + "Total discount               : " + "Rs." + CalculateBill(user).TotalDiscount + "\n"
+                             + "Total Tax                    : " + "Rs." + CalculateBill(user).TotalTax + "\n"
+                             + "Rental                       : " + "Rs." + CalculateBill(user).Rental + "\n"
+                             + "Bill amount                  : " + "Rs." + CalculateBill(user).Billamount + "\n");
 
             Console.WriteLine("--------------------------------------------------------------------------------- \n");
 
-            user.PrintCallsList(user);
+            user.PrintCallsList(user, month);
         }
 
     }

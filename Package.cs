@@ -9,18 +9,41 @@ namespace Biller
     public class Package
     {
 
-        public string PackageCode { get; set; }
-        public double MonthlyRental { get; set; }
-        public string BillingType { get; set; }
-        public string CallType { get; set; }
-        public int OffPeakStartHour { get; set; }
-        public int OffPeakEndHour { get; set; }
-        public int PeakStartHour { get; set; }
-        public int PeakEndHour { get; set; }
-        public double PeakandLocalCharge { get; set; }
-        public double PeakandLongDistanceCharge { get; set; }
-        public double OffPeakandLocalCharge { get; set; }
-        public double OffPeakandLongDistanceCharge { get; set; }
+        private string packageCode;
+        public string PackageCode { get { return packageCode; } set { packageCode = value; } }
+
+        private double monthlyRental;
+        public double MonthlyRental { get { return monthlyRental; } set { monthlyRental = value; } }
+
+        private string billingType;
+        public string BillingType { get { return billingType; } set { billingType = value; } }
+
+        private string callType;
+        public string CallType { get { return callType; } set { callType = value; } }
+
+        private int offPeakStartHour;
+        public int OffPeakStartHour { get { return offPeakStartHour; } set { offPeakStartHour = value; } }
+
+        private int offPeakEndHour;
+        public int OffPeakEndHour { get { return offPeakEndHour; } set { offPeakEndHour = value; } }
+
+        private int peakStartHour;
+        public int PeakStartHour { get { return peakStartHour; } set { peakStartHour = value; } }
+
+        private int peakEndHour;
+        public int PeakEndHour { get { return peakEndHour; } set { peakEndHour = value; } }
+
+        private double peakandLocalCharge;
+        public double PeakandLocalCharge { get { return peakandLocalCharge; } set { peakandLocalCharge = value; } }
+
+        private double peakandLongDistanceCharge;
+        public double PeakandLongDistanceCharge { get { return peakandLongDistanceCharge; } set { peakandLongDistanceCharge = value; } }
+
+        private double offPeakandLocalCharge;
+        public double OffPeakandLocalCharge { get { return offPeakandLocalCharge; } set { offPeakandLocalCharge = value; } }
+
+        private double offPeakandLongDistanceCharge;
+        public double OffPeakandLongDistanceCharge { get { return offPeakandLongDistanceCharge; } set { offPeakandLongDistanceCharge = value; } }
 
 
         public Package(string packageCode, double monthlyRental, string billingType, int offPeakStartHour, int offPeakEndHour, int peakStartHour, int peakEndHour, double peakandLocalCharge, double peakandLongDistanceCharge, double offPeakandLocalCharge, double offPeakandLongDistanceCharge)
