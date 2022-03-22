@@ -60,5 +60,18 @@ namespace Biller
             OffPeakandLocalCharge = offPeakandLocalCharge;
             OffPeakandLongDistanceCharge = offPeakandLongDistanceCharge;
         }
+        public double MakeFirstMinuteFree(Package pkg,double noOfMins, double callCharge, double chargePerMin)
+        {
+            if(pkg.packageCode == "B" || pkg.packageCode == "C")
+            {
+                if (noOfMins > 1) { callCharge = callCharge - chargePerMin * (noOfMins - 1); }
+                return callCharge;
+            }
+            else
+            {
+                return 0.00;
+            }
+
+        }
     }
 }

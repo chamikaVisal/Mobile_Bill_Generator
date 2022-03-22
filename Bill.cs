@@ -9,9 +9,6 @@ namespace Biller
 {
     public class Bill
     {
-        private User userobj;
-        public User user { get { return userobj; } set { userobj = value; } }
-
         private double totalCallCharges;
         public double TotalCallCharges { get { return totalCallCharges; } set { totalCallCharges = value; } }
 
@@ -81,20 +78,20 @@ namespace Biller
             foreach (CDR obj in user.GetCallsList())
             {
                 double NoOfMins = 0.00;
+
                 if (pkg.BillingType == "PER_MINUTE")
                 {
                     NoOfMins = obj.CallDuration / 60;
                 }
                 else
                 {
-                    Console.WriteLine("this is pkg type > " + pkg.BillingType);
                     NoOfMins = obj.CallDuration / 3600;
-                    Console.WriteLine("No of mins" + NoOfMins);
                 }
 
 
                 if (obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && obj.IsLocalCall(obj))    // peak hour and local call
                 {
+   
                     double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.PeakandLocalCharge);
 
                     obj.Charge = CallFare;
@@ -127,14 +124,13 @@ namespace Biller
                 }
                 bill.TotalTax = bill.TotalCallCharges * (20.0 / 100);
 
-                if (bill.TotalCallCharges > 1000)
+                if (bill.TotalCallCharges > 1000 && (pkg.PackageCode=="A" || pkg.PackageCode == "C"))
                 {
                     bill.TotalDiscount = bill.TotalCallCharges * (40.0 / 100);
                 }
                 bill.Billamount = (bill.TotalCallCharges + bill.TotalTax + bill.Rental) - bill.TotalDiscount;
             }
         }
-
 
         public void PrintBill(User user, string month)
         {
