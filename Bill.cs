@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Biller
 {
+    public delegate bool CheckCallDelegate(CDR obj);
+    public delegate bool CheckHourDelegate(CDR obj, int a, int b);
+
     public class Bill
     {
         private double totalCallCharges;
@@ -22,7 +25,7 @@ namespace Biller
         public double Rental { get { return rental; } set { rental = value; } }
 
         private double billamount;
-        public double Billamount { get { return billamount; } set { billamount = value; } }
+        public double BillAmount { get { return billamount; } set { billamount = value; } }
 
         public Bill()
         {
@@ -35,17 +38,17 @@ namespace Biller
             TotalDiscount = totalDiscount;
             TotalTax = totalTax;
             Rental = rental;
-            Billamount = billamount;
+            BillAmount = billamount;
         }
 
         public Bill CalculateBill(User user)
         {
             Bill bill = new Bill();
 
-            Package packageA = new Package("A", 100, "PER_MINUTE", 18, 10, 10, 18, 3, 5, 2, 4);
-            Package packageB = new Package("B", 100, "PER_SECOND", 20, 8, 8, 20, 4, 6, 3, 5);
-            Package packageC = new Package("C", 300, "PER_MINUTE", 21, 9, 9, 21, 2, 3, 1, 2);
-            Package packageD = new Package("D", 399, "PER_SECOND", 20, 8, 8, 20, 3, 5, 2, 4);
+            Package packageA = new Package("A", 100.0, "PER_MINUTE", 18, 10, 10, 18, 3, 5, 2, 4);
+            Package packageB = new Package("B", 100.0, "PER_SECOND", 20, 8, 8, 20, 4, 6, 3, 5);
+            Package packageC = new Package("C", 300.0, "PER_MINUTE", 21, 9, 9, 21, 2, 3, 1, 2);
+            Package packageD = new Package("D", 399.0, "PER_SECOND", 20, 8, 8, 20, 3, 5, 2, 4);
 
             switch (user.PackageCode)
             {
@@ -78,6 +81,9 @@ namespace Biller
             foreach (CDR obj in user.GetCallsList())
             {
                 double NoOfMins = 0.00;
+                double CallFare = 0.00;
+                CheckCallDelegate CheckLocalCallDelegate = new CheckCallDelegate(obj.IsLocalCall);
+                CheckHourDelegate CheckPeakHourDelegate = new CheckHourDelegate(obj.IsPeakHour);
 
                 if (pkg.BillingType == "PER_MINUTE")
                 {
@@ -89,31 +95,31 @@ namespace Biller
                 }
 
 
-                if (obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && obj.IsLocalCall(obj))    // peak hour and local call
+                if (CheckPeakHourDelegate(obj, pkg.PeakStartHour, pkg.PeakEndHour) && CheckLocalCallDelegate(obj))          // peak hour and local call
                 {
-   
-                    double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.PeakandLocalCharge);
+
+                    CallFare = (double)((int)Math.Round(NoOfMins) * pkg.PeakandLocalCharge);
 
                     obj.Charge = CallFare;
                     bill.TotalCallCharges += CallFare;
                 }
-                else if (obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && !obj.IsLocalCall(obj))  // peak hour and long distance call
+                else if (CheckPeakHourDelegate(obj, pkg.PeakStartHour, pkg.PeakEndHour) && !CheckLocalCallDelegate(obj))    // peak hour and long distance call
                 {
-                    double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.PeakandLongDistanceCharge);
+                    CallFare = (double)((int)Math.Round(NoOfMins) * pkg.PeakandLongDistanceCharge);
 
                     obj.Charge = CallFare;
                     bill.TotalCallCharges += CallFare;
                 }
-                else if (!obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && obj.IsLocalCall(obj))  // off -peak hour and local call
+                else if (!CheckPeakHourDelegate(obj, pkg.PeakStartHour, pkg.PeakEndHour) && CheckLocalCallDelegate(obj))    // off -peak hour and local call
                 {
-                    double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.OffPeakandLocalCharge);
+                    CallFare = (double)((int)Math.Round(NoOfMins) * pkg.OffPeakandLocalCharge);
 
                     obj.Charge = CallFare;
                     bill.TotalCallCharges += CallFare;
                 }
-                else if (!obj.IsPeakHour(obj, pkg.PeakStartHour, pkg.PeakEndHour) && !obj.IsLocalCall(obj)) // off -peak hour and long distance call
+                else if (!CheckPeakHourDelegate(obj, pkg.PeakStartHour, pkg.PeakEndHour) && !CheckLocalCallDelegate(obj))   // off -peak hour and long distance call
                 {
-                    double CallFare = (double)((int)Math.Round(NoOfMins) * pkg.OffPeakandLongDistanceCharge);
+                    CallFare = (double)((int)Math.Round(NoOfMins) * pkg.OffPeakandLongDistanceCharge);
 
                     obj.Charge = CallFare;
                     bill.TotalCallCharges += CallFare;
@@ -122,13 +128,21 @@ namespace Biller
                 {
                     throw new Exception();
                 }
-                bill.TotalTax = bill.TotalCallCharges * (20.0 / 100);
 
-                if (bill.TotalCallCharges > 1000 && (pkg.PackageCode=="A" || pkg.PackageCode == "C"))
+                bill.TotalTax = (bill.TotalCallCharges + bill.Rental) * (20.0 / 100);
+
+                if (bill.TotalCallCharges > 1000 && (pkg.PackageCode == "A" || pkg.PackageCode == "C"))
                 {
                     bill.TotalDiscount = bill.TotalCallCharges * (40.0 / 100);
                 }
-                bill.Billamount = (bill.TotalCallCharges + bill.TotalTax + bill.Rental) - bill.TotalDiscount;
+
+                bill.BillAmount = (bill.TotalCallCharges + bill.TotalTax + bill.Rental) - bill.TotalDiscount;
+
+            }
+
+            if (user.GetCallsList().Count < 1)
+            {
+                bill.BillAmount = bill.Rental;
             }
         }
 
@@ -144,7 +158,7 @@ namespace Biller
                              + "Total discount               : " + "Rs." + CalculateBill(user).TotalDiscount + "\n"
                              + "Total Tax                    : " + "Rs." + CalculateBill(user).TotalTax + "\n"
                              + "Rental                       : " + "Rs." + CalculateBill(user).Rental + "\n"
-                             + "Bill amount                  : " + "Rs." + CalculateBill(user).Billamount + "\n");
+                             + "Bill amount                  : " + "Rs." + CalculateBill(user).BillAmount + "\n");
 
             Console.WriteLine("--------------------------------------------------------------------------------- \n");
 

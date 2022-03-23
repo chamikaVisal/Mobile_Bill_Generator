@@ -29,9 +29,9 @@ namespace Biller
         public DateTime RegisteredDate { get { return registeredDate; } set { registeredDate = value; } }
 
         private List<CDR> calls = new List<CDR>();
-        public List<CDR> Calls { get { return calls; }set { calls = value; }  }
+        public List<CDR> Calls { get { return calls; } set { calls = value; } }
 
-        private List<User>users = new List<User>();
+        private List<User> users = new List<User>();
         public List<User> Users { get { return users; } set { users = value; } }
 
         private User userobj;
@@ -94,25 +94,31 @@ namespace Biller
 
         }
 
+        
+
         public void PrintCallsList(User user, string month)
         {
-            if (user.PhoneNumber == PhoneNumber)
+            Console.WriteLine("Call Records for " + user.PhoneNumber + " for the month of " + month + " 2022\n");
+
+            if (user.PhoneNumber == PhoneNumber && user.GetCallsList().Count > 0)
             {
+                foreach (var obj in Calls)
                 {
-                    Console.WriteLine("Call Records for " + user.PhoneNumber + " for the month of " + month + " 2022\n");
-                    foreach (var obj in Calls)
-                    {
-                        Console.WriteLine("Callee Phone Number         : " + obj.CalleePhoneNumber + "\n"
-                                         +"Call Duration               : " + obj.CallDuration + " seconds" + "\n"
-                                         +"Call Start Time             : " + obj.CallStartTime + "\n"
-                                         +"Call Charge                 : " + "Rs." + obj.Charge + "\n");
-                    }
-                    Console.WriteLine("--------------------------------------------------------------------------------- \n");
+                    Console.WriteLine("Callee Phone Number         : " + obj.CalleePhoneNumber + "\n"
+                                     + "Call Duration               : " + obj.CallDuration + " seconds" + "\n"
+                                     + "Call Start Time             : " + obj.CallStartTime + "\n"
+                                     + "Call Charge                 : " + "Rs." + obj.Charge + "\n");
                 }
+                Console.WriteLine("--------------------------------------------------------------------------------- \n");
+
+            }
+            else
+            {
+                Console.WriteLine("----------------------- No Call Records for " + (user.PhoneNumber) + " ---------------------------");
             }
         }
 
-        
+
 
     }
 }

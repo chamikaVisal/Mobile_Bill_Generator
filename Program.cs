@@ -22,9 +22,11 @@ namespace Biller
             User user = new User(); 
             User user1 = new User("Chamika", "Perera", "SLIIT, Malabe", "A", 0717291782, DateTime.Now);
             User user2 = new User("Chelaka", "Perera", "Kurunegala Road, Madampe", "C", 0779617149, DateTime.Now);
+            User user3 = new User("Maleesha", "Perera", "TH, Kurunegala", "C", 0702333026, DateTime.Now);
 
             user.AddtoUserList(user1);
             user.AddtoUserList(user2);
+            user.AddtoUserList(user3);
 
             CDR cdr1 = new CDR(0717291782, 0718331022, DateTime.Now, 100);
             CDR cdr2 = new CDR(0717291782, 0718331022, DateTime.Now, 250);
@@ -40,6 +42,7 @@ namespace Biller
 
             user2.AddtoCDRList(cdr4, month);
 
+            //Assumption - All the records are inputed for the year 2022
 
             b1.PrintBill(user.getUser(phoneNo),month);
 
